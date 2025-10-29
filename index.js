@@ -196,7 +196,7 @@
             width: 30vw;
             height: 50px; /* Set a fixed height for the container */
             overflow: hidden; 
-            border:solid;
+            border:none;
             border-radius:25px;
             }
 
