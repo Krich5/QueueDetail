@@ -192,7 +192,7 @@
             display: flex;
             position: fixed;  /* take it out of normal flow */
             top: 8px;         /* distance from top header */
-            left: 100px;     /* distance from left edge */
+            left: 200px;     /* distance from left edge */
             z-index: 9999;
             }
             .marquee-container {
