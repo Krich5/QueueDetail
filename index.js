@@ -194,10 +194,9 @@
             }
             .marquee-container {
             width: 30vw;
-            height: 50px; /* Set a fixed height for the container */
+            height: 30px; /* Set a fixed height for the container */
             overflow: hidden; 
             border:none;
-            border-radius:25px;
             }
 
             .marquee {
