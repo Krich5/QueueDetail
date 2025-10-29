@@ -29,8 +29,159 @@
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */function w(r){return g({...r,state:!0,attribute:!1})}const Rt="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20aria-hidden='true'%20role='img'%20class='iconify%20iconify--logos'%20width='25.6'%20height='32'%20preserveAspectRatio='xMidYMid%20meet'%20viewBox='0%200%20256%20320'%3e%3cpath%20fill='%2300E8FF'%20d='m64%20192l25.926-44.727l38.233-19.114l63.974%2063.974l10.833%2061.754L192%20320l-64-64l-38.074-25.615z'%3e%3c/path%3e%3cpath%20fill='%23283198'%20d='M128%20256V128l64-64v128l-64%2064ZM0%20256l64%2064l9.202-60.602L64%20192l-37.542%2023.71L0%20256Z'%3e%3c/path%3e%3cpath%20fill='%23324FFF'%20d='M64%20192V64l64-64v128l-64%2064Zm128%20128V192l64-64v128l-64%2064ZM0%20256V128l64%2064l-64%2064Z'%3e%3c/path%3e%3cpath%20fill='%230FF'%20d='M64%20320V192l64%2064z'%3e%3c/path%3e%3c/svg%3e",kt="/vite.svg";var zt=Object.defineProperty,Ft=Object.getOwnPropertyDescriptor,G=(r,t,e,i)=>{for(var s=i>1?void 0:i?Ft(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&zt(t,e,s),s};let q=class extends _{constructor(){super(...arguments),this.docsHint="Click on the Vite and Lit logos to learn more",this.count=0}render(){return E`
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src=${kt} class="logo" alt="Vite logo" />
+        </a>
+        <a href="https://lit.dev" target="_blank">
+          <img src=${Rt} class="logo lit" alt="Lit logo" />
+        </a>
+      </div>
+      <slot></slot>
+      <div class="card">
+        <button @click=${this._onClick} part="button">
+          count is ${this.count}
+        </button>
+      </div>
+      <p class="read-the-docs">${this.docsHint}</p>
+    `}_onClick(){this.count++}};q.styles=k`
+    :host {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+    }
 
-  `;tt([g()],N.prototype,"token",2);tt([w()],N.prototype,"agentList",2);N=tt([B("admin-actions")],N);var Zt=Object.defineProperty,Jt=Object.getOwnPropertyDescriptor,f=(r,t,e,i)=>{for(var s=i>1?void 0:i?Jt(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&Zt(t,e,s),s};let u=class extends _{constructor(){super(...arguments),this.queueStats=[],this.queueFilter=[]}connectedCallback(){super.connectedCallback(),this.getQueues(),this._timerInterval=setInterval(()=>this.getStats(),3e4),this.mapUpdate=setInterval(()=>this.updateTemplate(),1e3)}disconnectedCallback(){super.disconnectedCallback(),clearInterval(this._timerInterval),clearInterval(this.mapUpdate)}async getQueues(){const r=new Headers;r.append("Authorization",`Bearer ${this.token}`),r.append("Accept","*/*");const t={method:"GET",headers:r,redirect:"follow"},e=[`/v2/contact-service-queue/by-user-id/${this.agentId}/agent-based-queues`,`/v2/contact-service-queue/by-user-id/${this.agentId}/skill-based-queues`,`/team/${this.teamId}/incoming-references`];this.queueFilter=[],e.forEach(async(i,s)=>{try{const n=await(await fetch(`https://api.wxcc-us1.cisco.com/organization/${this.orgId}${i}`,t)).json();n.data.forEach(l=>this.queueFilter.push({lastQueue:{id:{equals:l.id}}})),console.log(n)}catch(o){console.error(o)}s>=e.length-1&&this.getStats()})}async getStats(){const r=new Headers;r.append("Content-Type","application/json"),r.append("Accept","application/json"),r.append("Authorization",`Bearer ${this.token}`);const t=JSON.stringify({query:"query queueStats($from:Long! $to:Long! $timeComparator:QueryTimeType $filter:TaskFilters $aggregations:[TaskV2Aggregation]){task(from:$from to:$to timeComparator:$timeComparator filter:$filter aggregations:$aggregations){tasks{lastQueue{name}aggregation{name value}}}}",variables:{from:`${Date.now()-864e5}`,to:`${Date.now()}`,timeComparator:"createdTime",filter:{and:[{isActive:{equals:!0}},{status:{equals:"parked"}},{or:this.queueFilter}]},aggregations:[{field:"id",type:"count",name:"contacts"},{field:"createdTime",type:"min",name:"oldestStart"}]}}),e={method:"POST",headers:r,body:t,redirect:"follow"};try{const s=await(await fetch("https://api.wxcc-us1.cisco.com/search",e)).json();this.queueData=await s.data.task.tasks,console.log(s)}catch(i){console.error(i)}}updateTemplate(){this.queueStats=this.queueData.map(r=>E`<li> Queue: ${r.lastQueue.name} Contacts: ${r.aggregation[1].value} | Wait: ${new Date(Date.now()-r.aggregation[0].value).toISOString().slice(11,-5)}</li>`)}render(){return E`
+    .logo {
+      height: 6em;
+      padding: 1.5em;
+      will-change: filter;
+      transition: filter 300ms;
+    }
+    .logo:hover {
+      filter: drop-shadow(0 0 2em #646cffaa);
+    }
+    .logo.lit:hover {
+      filter: drop-shadow(0 0 2em #325cffaa);
+    }
+
+    .card {
+      padding: 2em;
+    }
+
+    .read-the-docs {
+      color: #888;
+    }
+
+    ::slotted(h1) {
+      font-size: 3.2em;
+      line-height: 1.1;
+    }
+
+    a {
+      font-weight: 500;
+      color: #646cff;
+      text-decoration: inherit;
+    }
+    a:hover {
+      color: #535bf2;
+    }
+
+    button {
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+      font-weight: 500;
+      font-family: inherit;
+      background-color: #1a1a1a;
+      cursor: pointer;
+      transition: border-color 0.25s;
+    }
+    button:hover {
+      border-color: #646cff;
+    }
+    button:focus,
+    button:focus-visible {
+      outline: 4px auto -webkit-focus-ring-color;
+    }
+
+    @media (prefers-color-scheme: light) {
+      a:hover {
+        color: #747bff;
+      }
+      button {
+        background-color: #f9f9f9;
+      }
+    }
+  `;G([g()],q.prototype,"docsHint",2);G([g({type:Number})],q.prototype,"count",2);q=G([B("my-element")],q);var Bt=Object.defineProperty,Vt=Object.getOwnPropertyDescriptor,Y=(r,t,e,i)=>{for(var s=i>1?void 0:i?Vt(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&Bt(t,e,s),s};let H=class extends _{constructor(){super(...arguments),this.myprop="My Property",this.mystate="My State"}changeValues(r){this.myprop=r,this.mystate="set by method"}render(){return E`
+        <div>
+            <h1>${this.myprop}</h1>
+            <h2>${this.mystate}</h2>
+            <input value=${this.myprop} @change=${r=>this.myprop=r.target.value}> 
+            <input value=${this.mystate} @change=${r=>this.mystate=r.target.value}>
+            <button @click=${this.changeValues.bind(this,"set by button")}>Call Method</button>
+        </div>`}};H.styles=[k`
+            :host {
+                display: block;
+            }
+                        div{
+                border:solid black 2px;
+            }
+            h1{
+                color:blue;
+            }
+            h2{
+                color:red;
+            }
+        `];Y([g()],H.prototype,"myprop",2);Y([w()],H.prototype,"mystate",2);H=Y([B("hello-world")],H);var Wt=Object.defineProperty,Qt=Object.getOwnPropertyDescriptor,tt=(r,t,e,i)=>{for(var s=i>1?void 0:i?Qt(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&Wt(t,e,s),s};let N=class extends _{constructor(){super(...arguments),this.agentList=[]}async logOutAgent(r){const t=new Headers;t.append("Authorization",`Bearer ${this.token}`),t.append("Content-Type","application/json");const e=JSON.stringify({logoutReason:"Admin Logout",agentId:r.target.value}),i={method:"PUT",headers:t,body:e,redirect:"follow"};try{const o=await(await fetch("https://api.wxcc-us1.cisco.com/v1/agents/logout",i)).text();console.log(o)}catch(s){console.error(s)}}async getAgents(){const r=new Headers;r.append("Content-Type","application/json"),r.append("Accept","application/json"),r.append("Authorization",`Bearer ${this.token}`);const t=JSON.stringify({query:"query activeAgents($from:Long! $to:Long! $filter:AgentSessionFilters $extFilter:AgentSessionSpecificFilters $pagination:Pagination){agentSession(from:$from to:$to filter:$filter extFilter:$extFilter pagination:$pagination){agentSessions{agentId agentName startTime teamName channelInfo{currentState lastActivityTime}}pageInfo{endCursor hasNextPage}intervalInfo{interval timezone}}}",variables:{from:`${Date.now()-864e5}`,to:`${Date.now()}`,filter:{and:[{isActive:{equals:!0}},{channelInfo:{channelType:{equals:"telephony"}}}]},extFilter:{},pagination:{}}}),e={method:"POST",headers:r,body:t,redirect:"follow"};try{const s=await(await fetch("https://api.wxcc-us1.cisco.com/search",e)).json();this.agentList=s.data.agentSession.agentSessions,console.log(s)}catch(i){console.error(i)}}render(){return E`
+        <h1 class="title">Admin Actions</h1>
+        <div><button @click=${this.getAgents}>Refresh Agent List</button></div>
+        <table>
+            <thead>
+                <th>Agent Name</th>
+                <th>Team</th>
+                <th>Log in Time</th>
+                <th>Status</th>
+                <th>Time in Status</th>
+                <th>Action</th>
+            </thead>
+                ${this.agentList?.map(r=>E`
+                <tbody>
+                    <td>${r.agentName}</td>
+                    <td>${r.teamName}</td>
+                    <td>${new Date(r.startTime).toLocaleString()}</td>
+                    <td>${r.channelInfo[0].currentState}</td>
+                    <td>${new Date(Date.now()-r.channelInfo[0].lastActivityTime).toISOString().slice(11,-5)}</td>
+                    <td><button value=${r.agentId} @click="${this.logOutAgent}">Log Out</button></td>
+                </tbody>
+                `)}
+        </table>
+        `}};N.styles=[k`
+            :host{
+            display: flex;
+            flex-direction: column;
+            border: solid 3px var(--md-primary-text-color);
+            padding: 2em;
+            color:var(--md-primary-text-color)
+            }
+            .title{
+            text-align: center
+            }
+            table{
+            display:table;
+            border-collapse:collapse;
+            border-spacing: 0;
+            margin-top: 15px;
+            }
+            tr, th, td{
+            border: solid 1px;
+            text-align: center;
+            }
+            .hidden{
+            display:none;
+            }
+        `];tt([g()],N.prototype,"token",2);tt([w()],N.prototype,"agentList",2);N=tt([B("admin-actions")],N);var Zt=Object.defineProperty,Jt=Object.getOwnPropertyDescriptor,f=(r,t,e,i)=>{for(var s=i>1?void 0:i?Jt(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&Zt(t,e,s),s};let u=class extends _{constructor(){super(...arguments),this.queueStats=[],this.queueFilter=[]}connectedCallback(){super.connectedCallback(),this.getQueues(),this._timerInterval=setInterval(()=>this.getStats(),3e4),this.mapUpdate=setInterval(()=>this.updateTemplate(),1e3)}disconnectedCallback(){super.disconnectedCallback(),clearInterval(this._timerInterval),clearInterval(this.mapUpdate)}async getQueues(){const r=new Headers;r.append("Authorization",`Bearer ${this.token}`),r.append("Accept","*/*");const t={method:"GET",headers:r,redirect:"follow"},e=[`/v2/contact-service-queue/by-user-id/${this.agentId}/agent-based-queues`,`/v2/contact-service-queue/by-user-id/${this.agentId}/skill-based-queues`,`/team/${this.teamId}/incoming-references`];this.queueFilter=[],e.forEach(async(i,s)=>{try{const n=await(await fetch(`https://api.wxcc-us1.cisco.com/organization/${this.orgId}${i}`,t)).json();n.data.forEach(l=>this.queueFilter.push({lastQueue:{id:{equals:l.id}}})),console.log(n)}catch(o){console.error(o)}s>=e.length-1&&this.getStats()})}async getStats(){const r=new Headers;r.append("Content-Type","application/json"),r.append("Accept","application/json"),r.append("Authorization",`Bearer ${this.token}`);const t=JSON.stringify({query:"query queueStats($from:Long! $to:Long! $timeComparator:QueryTimeType $filter:TaskFilters $aggregations:[TaskV2Aggregation]){task(from:$from to:$to timeComparator:$timeComparator filter:$filter aggregations:$aggregations){tasks{lastQueue{name}aggregation{name value}}}}",variables:{from:`${Date.now()-864e5}`,to:`${Date.now()}`,timeComparator:"createdTime",filter:{and:[{isActive:{equals:!0}},{status:{equals:"parked"}},{or:this.queueFilter}]},aggregations:[{field:"id",type:"count",name:"contacts"},{field:"createdTime",type:"min",name:"oldestStart"}]}}),e={method:"POST",headers:r,body:t,redirect:"follow"};try{const s=await(await fetch("https://api.wxcc-us1.cisco.com/search",e)).json();this.queueData=await s.data.task.tasks,console.log(s)}catch(i){console.error(i)}}updateTemplate(){this.queueStats=this.queueData.map(r=>E`<li> | Queue: ${r.lastQueue.name} Contacts: ${r.aggregation[1].value} Wait: ${new Date(Date.now()-r.aggregation[0].value).toISOString().slice(11,-5)} |</li>`)}render(){return E`
         <div class="marquee-container">
             <ul class="marquee" style="animation-duration: ${this.queueStats.length*10}s">
                 ${this.queueStats}
@@ -66,7 +217,7 @@
             align-items:center;
             justify-content:center;
             flex-shrink:0;
-            font-size:2rem;
+            font-size:1rem;
             white-space:nowrap;
             padding: 0 1rem 0 1rem;
             }
