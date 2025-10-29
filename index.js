@@ -217,7 +217,7 @@
             align-items:center;
             justify-content:center;
             flex-shrink:0;
-            font-size:2rem;
+            font-size:1rem;
             white-space:nowrap;
             padding: 0 1rem 0 1rem;
             }
