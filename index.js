@@ -194,9 +194,10 @@
             }
             .marquee-container {
             width: 30vw;
-            height: 30px; /* Set a fixed height for the container */
+            height: 50px; /* Set a fixed height for the container */
             overflow: hidden; 
             border:none;
+            border-radius:2px;
             }
 
             .marquee {
@@ -204,8 +205,10 @@
             display:flex;
             padding: 0;
             margin: 0;
-            height:75%;
+            height:100%;
             width:max-content;
+            animation: scroll linear infinite;
+            animation-duration: 10s;
             align-items:center;
             }
             .marquee li {
