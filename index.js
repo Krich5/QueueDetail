@@ -197,7 +197,7 @@
             height: 50px; /* Set a fixed height for the container */
             overflow: hidden; 
             border:solid;
-            border-radius:25px;
+            border-radius:5px;
             }
 
             .marquee {
