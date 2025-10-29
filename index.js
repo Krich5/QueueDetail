@@ -185,7 +185,6 @@
         <div class="marquee-container">
             <ul class="marquee" style="animation-duration: ${this.queueStats.length*10}s">
                 ${this.queueStats}
-                ${this.queueStats}
             </ul>
         </div>
         `}};u.styles=[k`
