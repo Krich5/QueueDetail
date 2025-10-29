@@ -206,8 +206,6 @@
             margin: 0;
             height:75%;
             width:max-content;
-            animation: none;
-            animation-duration: 10s;
             align-items:center;
             }
             .marquee li {
