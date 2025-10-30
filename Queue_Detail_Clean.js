@@ -114,6 +114,26 @@
         background-color: #f9f9f9;
       }
     }
+  `;G([g()],q.prototype,"docsHint",2);G([g({type:Number})],q.prototype,"count",2);q=G([B("my-element")],q);var Bt=Object.defineProperty,Vt=Object.getOwnPropertyDescriptor,Y=(r,t,e,i)=>{for(var s=i>1?void 0:i?Vt(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&Bt(t,e,s),s};let H=class extends _{constructor(){super(...arguments),this.myprop="My Property",this.mystate="My State"}changeValues(r){this.myprop=r,this.mystate="set by method"}render(){return E`
+        <div>
+            <h1>${this.myprop}</h1>
+            <h2>${this.mystate}</h2>
+            <input value=${this.myprop} @change=${r=>this.myprop=r.target.value}> 
+            <input value=${this.mystate} @change=${r=>this.mystate=r.target.value}>
+            <button @click=${this.changeValues.bind(this,"set by button")}>Call Method</button>
+        </div>`}};H.styles=[k`
+            :host {
+                display: block;
+            }
+                        div{
+                border:solid black 2px;
+            }
+            h1{
+                color:blue;
+            }
+            h2{
+                color:red;
+            }
         `];tt([g()],N.prototype,"token",2);tt([w()],N.prototype,"agentList",2);N=tt([B("admin-actions")],N);var Zt=Object.defineProperty,Jt=Object.getOwnPropertyDescriptor,f=(r,t,e,i)=>{for(var s=i>1?void 0:i?Jt(t,e):t,o=r.length-1,n;o>=0;o--)(n=r[o])&&(s=(i?n(t,e,s):n(s))||s);return i&&s&&Zt(t,e,s),s};let u=class extends _{constructor(){super(...arguments),this.queueStats=[],this.queueFilter=[]}connectedCallback(){super.connectedCallback(),this.getQueues(),this._timerInterval=setInterval(()=>this.getStats(),3e4),this.mapUpdate=setInterval(()=>this.updateTemplate(),1e3)}disconnectedCallback(){super.disconnectedCallback(),clearInterval(this._timerInterval),clearInterval(this.mapUpdate)}async getQueues(){const r=new Headers;r.append("Authorization",`Bearer ${this.token}`),r.append("Accept","*/*");const t={method:"GET",headers:r,redirect:"follow"},e=[`/v2/contact-service-queue/by-user-id/${this.agentId}/agent-based-queues`,`/v2/contact-service-queue/by-user-id/${this.agentId}/skill-based-queues`,`/team/${this.teamId}/incoming-references`];this.queueFilter=[],e.forEach(async(i,s)=>{try{const n=await(await fetch(`https://api.wxcc-us1.cisco.com/organization/${this.orgId}${i}`,t)).json();n.data.forEach(l=>this.queueFilter.push({lastQueue:{id:{equals:l.id}}})),console.log(n)}catch(o){console.error(o)}s>=e.length-1&&this.getStats()})}async getStats(){const r=new Headers;r.append("Content-Type","application/json"),r.append("Accept","application/json"),r.append("Authorization",`Bearer ${this.token}`);const t=JSON.stringify({query:"query queueStats($from:Long! $to:Long! $timeComparator:QueryTimeType $filter:TaskFilters $aggregations:[TaskV2Aggregation]){task(from:$from to:$to timeComparator:$timeComparator filter:$filter aggregations:$aggregations){tasks{lastQueue{name}aggregation{name value}}}}",variables:{from:`${Date.now()-864e5}`,to:`${Date.now()}`,timeComparator:"createdTime",filter:{and:[{isActive:{equals:!0}},{status:{equals:"parked"}},{or:this.queueFilter}]},aggregations:[{field:"id",type:"count",name:"contacts"},{field:"createdTime",type:"min",name:"oldestStart"}]}}),e={method:"POST",headers:r,body:t,redirect:"follow"};try{const s=await(await fetch("https://api.wxcc-us1.cisco.com/search",e)).json();this.queueData=await s.data.task.tasks,console.log(s)}catch(i){console.error(i)}}updateTemplate(){this.queueStats=this.queueData.map(r=>E`<li>Queue: ${r.lastQueue.name}<br>Contacts: ${r.aggregation[1].value}<br>Wait: ${new Date(Date.now()-r.aggregation[0].value).toISOString().slice(11,-5)}</li>`)}render(){return E`
         <div class="marquee-container">
             <ul class="marquee" style="animation-duration: ${this.queueStats.length*10}s">
